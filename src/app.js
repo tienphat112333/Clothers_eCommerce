@@ -7,14 +7,19 @@ const app = express();
 app.use(morgan("dev"));
 app.use(helmet());
 app.use(compression());
+
 // init db
+require("./dbs/init.mongodb");
+const { countConnect, checkOverLoad } = require("./helpers/check.connect");
+countConnect();
+checkOverLoad();
 
 // init routers
 app.get("/", (req, res, next) => {
   const strCompress = "hello abc";
   return res.status(200).json({
     message: "hello phat!",
-    metadata: strCompress.repeat(10000),
+    // metadata: strCompress.repeat(10000),
   });
 });
 // handling error
